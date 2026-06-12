@@ -17,8 +17,7 @@ function getExtension(name :  string){
     return index===-1 ? '' : name.slice(index+1).toLowerCase();
 };
 
-export async function loadFileAsDocuments(args  : LoadFileArgs) :  Promise<Document[]>{
-    const  {filePath,mimeType,originalName} = args;
+export async function loadFileAsDocuments({filePath,mimeType,originalName}: LoadFileArgs) :  Promise<Document[]>{
 
     const extractExtension = getExtension(originalName);
 
