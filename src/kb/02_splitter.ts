@@ -19,7 +19,7 @@ export async function splitDocuments(docs : Document[]) : Promise<Document[]>{
         const base = chunk?.metadata ?? {};
 
         return new Document({
-            pageContent :  chunk.pageContent.trim(),
+            pageContent : chunk.pageContent.trim(),
             metadata :{
                 ...base,
                 source : base?.source ?? 'Unknown_Source',

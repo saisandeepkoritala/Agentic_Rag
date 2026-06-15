@@ -28,7 +28,9 @@ kbRouter.post("/upload",upload.single('file'),async(req,res)=>{
 
         const {path,mimetype,originalname} = req.file;
 
-        const rawDocs = await loadFileAsDocuments({filePath:path,mimeType:mimetype,originalName:originalname});
+        const rawDocs = await loadFileAsDocuments(
+            {filePath:path,mimeType:mimetype,originalName:originalname}
+        ); //1
 
         if( !rawDocs ||  !rawDocs.length){
             return res.status(400).json({
@@ -37,7 +39,7 @@ kbRouter.post("/upload",upload.single('file'),async(req,res)=>{
             })
         }
 
-        const chunks = await splitDocuments(rawDocs);
+        const chunks = await splitDocuments(rawDocs); //2
 
         if(!chunks || !chunks.length){
             return res.status(400).json({
@@ -46,7 +48,7 @@ kbRouter.post("/upload",upload.single('file'),async(req,res)=>{
             })
         }
 
-        const summary = await ingestDocuments(namespace,chunks);
+        const summary = await ingestDocuments(namespace,chunks); //3
 
         return res.status(200).json({
             ok : summary.ok,

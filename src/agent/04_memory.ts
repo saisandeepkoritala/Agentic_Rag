@@ -1,5 +1,4 @@
 import { getDb } from "@/utils/mongodb";
-import { context } from "langchain";
 import { Collection, WithId } from "mongodb";
 import { nanoid } from "nanoid";
 
@@ -8,7 +7,6 @@ export type ChatRole =  'user' | 'assistant';
 export interface ChatMessage{
     role : ChatRole,
     content : string,
-    ts ?: Date
 };
 
 export interface ConversationDoc {
@@ -16,7 +14,6 @@ export interface ConversationDoc {
     messages : {
         role :  ChatRole,
         content : string,
-        ts?:Date
     }[],
     createdAt : Date,
     updatedAt : Date
@@ -43,7 +40,7 @@ async function getConversationsCollection(): Promise<Collection<ConversationDoc>
 };
 
 
-export async function ensureThreadId(isThreadIdPresent : string) :Promise<string>{
+export async function ensureThreadId(isThreadIdPresent ?: string) :Promise<string>{
     const col = await getConversationsCollection();
 
     if(isThreadIdPresent){
@@ -68,14 +65,13 @@ export async function ensureThreadId(isThreadIdPresent : string) :Promise<string
 export async function getHistory(threadId : string){
 
     const col = await getConversationsCollection();
-    const conv :  WithId<ConversationDoc> | null = await col.findOne({threadId});
+    const conv : WithId<ConversationDoc> | null = await col.findOne({threadId});
 
     if(!conv) return []
 
     return conv.messages.map(msg =>({
         role : msg.role,
         content : msg.content,
-        ts : msg.ts
     }));
 };
 
@@ -88,7 +84,6 @@ export async function appendToHistory(threadId : string,...messages : ChatMessag
     const messagesWithTs = messages.map(msg=>({
         role : msg.role,
         content : msg.content,
-        ts : msg.ts
     }));
 
     await col.updateOne(
