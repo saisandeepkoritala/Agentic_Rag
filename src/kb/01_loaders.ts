@@ -14,18 +14,18 @@ interface LoadFileArgs{
 
 function getExtension(name :  string){
     const index = name.lastIndexOf(".");
-    return index===-1 ? '' : name.slice(index+1).toLowerCase();
+    return index === -1 ? '' : name.slice(index+1).toLowerCase();
 };
 
 export async function loadFileAsDocuments({filePath,mimeType,originalName}: LoadFileArgs) :  Promise<Document[]>{
 
     const extractExtension = getExtension(originalName);
 
-    const isMarkdown = mimeType ==="text/markdown" ||extractExtension === "md" || extractExtension === "markdown";
+    const isMarkdown = mimeType === "text/markdown" ||extractExtension === "md" || extractExtension === "markdown";
 
-    const  isText =  mimeType === "text/plain"  || extractExtension === "txt";
-
-    const isPdf = mimeType ==="application/pdf" || extractExtension === "pdf";
+    const isText =  mimeType === "text/plain"  || extractExtension === "txt";
+ 
+    const isPdf = mimeType === "application/pdf" || extractExtension === "pdf";
 
 
     if(isPdf){

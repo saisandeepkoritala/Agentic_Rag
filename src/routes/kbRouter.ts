@@ -26,7 +26,7 @@ kbRouter.post("/upload",upload.single('file'),async(req,res)=>{
             })
         }
 
-        const {path,mimetype,originalname} = req.file;
+        const {path, mimetype, originalname} = req.file;
 
         const rawDocs = await loadFileAsDocuments(
             {filePath:path,mimeType:mimetype,originalName:originalname}

@@ -22,22 +22,22 @@ export interface ConversationDoc {
 
 const conversation_collection = 'conversations';
 
-let convCollection : Promise<Collection<ConversationDoc>> | null = null;
+let convCollectionPromise : Promise<Collection<ConversationDoc>> | null = null;
 
-async function getConversationsCollection(): Promise<Collection<ConversationDoc>>{
-    if(!convCollection){
-        convCollection = (
-            async()=>{
-                const db = await getDb();
-                const col = db.collection<ConversationDoc>(conversation_collection);
-                await col.createIndex({threadId : 1},{unique : true});
-                return col;
-            }
-        )();
+export function getConversationsCollection(): Promise<Collection<ConversationDoc>> {
+    if (!convCollectionPromise) {
+        // We assign the execution promise directly to the cache variable
+        convCollectionPromise = (async () => {
+            const db = await getDb();
+            const col = db.collection<ConversationDoc>(conversation_collection);
+            await col.createIndex({ threadId: 1 }, { unique: true });
+            return col;
+        })();
     }
 
-    return convCollection;
-};
+    // convCollectionPromise is guaranteed to be a Promise here, satisfying the return type
+    return convCollectionPromise;
+}
 
 
 export async function ensureThreadId(isThreadIdPresent ?: string) :Promise<string>{

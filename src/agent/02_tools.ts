@@ -7,6 +7,7 @@ const DEFAULT_NAMESPACE = 'default';
 
 
 export const kbSearchTool = tool(
+
     async({question})=>{
         const ns = DEFAULT_NAMESPACE
         const {docs,confidence} = await retreiveRelevantChunks(question,ns,2);
